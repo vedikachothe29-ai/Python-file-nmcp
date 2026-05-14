@@ -1,0 +1,66 @@
+# Newton Forward Difference Interpolation
+
+
+x = list(map(float, input("Enter values for x : ").split()))
+y = list(map(float, input("Enter values for y : ").split()))
+
+
+print("x =", x)
+print("y =", y)
+
+
+# Function to create forward difference table
+def forward_difference_table(y, n):
+
+
+    # Create forward difference table
+    diff = [[0 for _ in range(n)] for _ in range(n)]
+
+
+    for i in range(n):
+        diff[i][0] = y[i]
+
+
+    for j in range(1, n):
+        for i in range(n - j):
+            diff[i][j] = diff[i + 1][j - 1] - diff[i][j - 1]
+
+
+    return diff
+
+
+value = float(input("Enter the value to interpolate: "))
+
+
+# Newton Forward Interpolation Function
+def newton_forward(x, y, value):
+
+
+    n = len(x)
+    h = x[1] - x[0]
+
+
+    diff = forward_difference_table(y, n)
+
+
+    u = (value - x[0]) / h
+    result = diff[0][0]
+
+
+    u_term = 1
+    fact = 1
+
+
+    for i in range(1, n):
+        u_term *= (u - (i - 1))
+        fact *= i
+        result += (u_term * diff[0][i]) / fact
+
+
+    return result
+
+
+ans = newton_forward(x, y, value)
+
+
+print(f"Interpolated value at x = {value} is {ans}")
